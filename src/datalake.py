@@ -46,11 +46,27 @@ def envoyer_fichier(client, chemin_local, bucket, cle):
     """Envoie un fichier local dans le bucket."""
     client.upload_file(str(chemin_local), bucket, cle)
 
+def recuperer_fichier(client, bucket, cle, chemin_local):
+    """Télécharge un fichier du bucket vers le PC."""
+    client.download_file(bucket, cle, str(chemin_local))
+
+
+def lister_cles(client, bucket, prefixe):
+    """Renvoie la liste des fichiers dont le nom commence par le préfixe."""
+    cles = []
+    paginateur = client.get_paginator("list_objects_v2")
+    for page in paginateur.paginate(Bucket=bucket, Prefix=prefixe):
+        for objet in page.get("Contents", []):
+            cles.append(objet["Key"])
+    return cles
+
 
 if __name__ == "__main__":
-    # Test de connexion : crée le bucket et liste les buckets existants
+    # Test : connexion, puis liste des fichiers bronze
     bucket = os.getenv("S3_BUCKET")
     client = creer_client()
     creer_bucket_si_absent(client, bucket)
-    noms = [b["Name"] for b in client.list_buckets()["Buckets"]]
-    print("Connexion OK. Buckets :", noms)
+    print("Connexion OK.")
+    print("Fichiers bronze :")
+    for cle in lister_cles(client, bucket, "bronze/"):
+        print("  -", cle)
