@@ -1,0 +1,17 @@
+# Environnement virtuel Python
+venv/
+
+# Fichiers temporaires générés par Python
+__pycache__/
+*.pyc
+
+# Données téléchargées (trop lourdes pour GitHub)
+data/
+
+# Mots de passe et clés secrètes
+.env
+
+# Fichiers système et éditeur
+.vscode/
+.DS_Store
+Thumbs.db
