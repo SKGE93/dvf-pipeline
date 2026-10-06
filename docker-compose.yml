@@ -13,5 +13,19 @@ services:
       - datalake_data:/data
     restart: unless-stopped
 
+  warehouse:
+    image: postgres:16
+    container_name: dvf-warehouse
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - warehouse_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
 volumes:
   datalake_data:
+  warehouse_data:
