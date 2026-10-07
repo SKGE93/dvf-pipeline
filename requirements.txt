@@ -1,5 +1,8 @@
 requests==2.32.3
-python-dotenv==1.0.1
+python-dotenv[cli]==1.0.1
 boto3>=1.35
 pandas>=2.2
 pyarrow>=17.0
+sqlalchemy>=2.0
+psycopg[binary]>=3.2
+dbt-postgres>=1.9,<2.0
