@@ -5,3 +5,12 @@ profile: dvf
 model-paths: ["models"]
 test-paths: ["tests"]
 macro-paths: ["macros"]
+
+models:
+  dvf:
+    staging:
+      +schema: staging
+      +materialized: view
+    gold:
+      +schema: gold
+      +materialized: table
