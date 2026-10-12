@@ -1,0 +1,60 @@
+version: 2
+
+models:
+  - name: dim_commune
+    description: "Une ligne par commune ayant au moins une vente"
+    columns:
+      - name: code_commune
+        description: "Code INSEE de la commune"
+        data_tests:
+          - unique
+          - not_null
+      - name: nom_commune
+        description: "Nom de la commune"
+        data_tests:
+          - not_null
+
+  - name: dim_date
+    description: "Une ligne par jour, de la première à la dernière vente"
+    columns:
+      - name: date_jour
+        description: "Le jour"
+        data_tests:
+          - unique
+          - not_null
+
+  - name: fait_ventes
+    description: "Une ligne par vente d'un logement unique"
+    columns:
+      - name: id_vente
+        description: "Identifiant de la vente"
+        data_tests:
+          - unique
+          - not_null
+      - name: code_commune
+        description: "Clé vers dim_commune"
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_commune')
+              field: code_commune
+      - name: date_vente
+        description: "Clé vers dim_date"
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_jour
+      - name: type_local
+        description: "Maison ou Appartement"
+        data_tests:
+          - accepted_values:
+              values: ["Maison", "Appartement"]
+      - name: prix
+        description: "Prix de vente en euros"
+        data_tests:
+          - not_null
+      - name: prix_m2
+        description: "Prix au mètre carré en euros"
+        data_tests:
+          - not_null

@@ -26,6 +26,28 @@ services:
       - warehouse_data:/var/lib/postgresql/data
     restart: unless-stopped
 
+  airflow:
+    build: .
+    container_name: dvf-airflow
+    command: standalone
+    ports:
+      - "8081:8080"
+    env_file: .env
+    environment:
+      S3_ENDPOINT: http://datalake:9000
+      POSTGRES_HOST: warehouse
+      POSTGRES_PORT: "5432"
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "true"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - ./src:/opt/pipeline/src
+      - ./dbt:/opt/pipeline/dbt
+    depends_on:
+      - datalake
+      - warehouse
+    restart: unless-stopped
+
 volumes:
   datalake_data:
   warehouse_data:
