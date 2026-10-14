@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python:
+    name: Lint et tests Python
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v5
+
+      - name: Installer Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Installer les dépendances
+        run: pip install -r requirements-dev.txt
+
+      - name: Ruff
+        run: ruff check src tests dags
+
+      - name: Pytest
+        run: pytest -v
+
+  dbt:
+    name: Vérification du projet dbt
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: dvf
+      POSTGRES_PASSWORD: ci
+      POSTGRES_DB: dvf
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v5
+
+      - name: Installer Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Installer dbt
+        run: pip install "dbt-postgres>=1.9,<2.0"
+
+      - name: dbt parse
+        run: dbt parse --project-dir dbt --profiles-dir dbt
