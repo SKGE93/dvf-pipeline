@@ -131,6 +131,8 @@ def main():
         nb_charges, nb_erreurs, compter_lignes(moteur),
     )
 
+    if nb_erreurs > 0:
+        raise SystemExit(1)
 
 if __name__ == "__main__":
     main()

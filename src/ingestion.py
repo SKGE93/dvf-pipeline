@@ -95,6 +95,9 @@ def main():
         nb_envoyes, nb_ignores, nb_erreurs,
     )
 
+    if nb_erreurs > 0:
+        raise SystemExit(1)
+
 
 if __name__ == "__main__":
     main()
